@@ -1,0 +1,313 @@
+﻿@model ShopProject.ViewModels.CollectionViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<!-- TO DO  : we can get parent element (it is for delete property) -->
+<head>
+    <link rel="stylesheet" href="~/css/uikit.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/uikit-rtl.css" asp-append-version="true"/>
+
+    <script src="~/js/uikit.js"></script>
+    <script src="~/js/uikit-icons.js"></script>
+
+
+
+    <!-- UIkit CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/[uikit-version]/css/uikit.min.css"/>
+
+    <!-- UIkit JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/[uikit-version]/js/uikit.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/[uikit-version]/js/uikit-icons.min.js"></script>
+    <script src="js/myJs.js"></script>
+
+
+
+    <link rel="stylesheet" href="~/css/uikit.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/uikit-rtl.css" asp-append-version="true"/>
+    
+    
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+    <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
+    
+    
+    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+    
+    
+
+   
+
+
+</head>
+<script>
+
+
+
+    var bar = document.getElementById('js-progressbar');
+
+    UIkit.upload('.js-upload', {
+
+        url: '',
+        multiple: true,
+
+        beforeSend: function (environment) {
+            console.log('beforeSend', arguments);
+
+            // The environment object can still be modified here.
+            // var {data, method, headers, xhr, responseType} = environment;
+
+        },
+        beforeAll: function () {
+            console.log('beforeAll', arguments);
+        },
+        load: function () {
+            console.log('load', arguments);
+        },
+        error: function () {
+            console.log('error', arguments);
+        },
+        complete: function () {
+            console.log('complete', arguments);
+        },
+
+        loadStart: function (e) {
+            console.log('loadStart', arguments);
+
+            bar.removeAttribute('hidden');
+            bar.max = e.total;
+            bar.value = e.loaded;
+        },
+
+        progress: function (e) {
+            console.log('progress', arguments);
+
+            bar.max = e.total;
+            bar.value = e.loaded;
+        },
+
+        loadEnd: function (e) {
+            console.log('loadEnd', arguments);
+
+            bar.max = e.total;
+            bar.value = e.loaded;
+        },
+
+        completeAll: function () {
+            console.log('completeAll', arguments);
+
+            setTimeout(function () {
+                bar.setAttribute('hidden', 'hidden');
+            }, 1000);
+
+            alert('Upload Completed');
+        }
+
+    });
+
+</script>
+
+<h1>Create</h1>
+
+<h4>Collection</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" asp-controller="Collection" method="post" enctype="multipart/form-data">
+        
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="@Model.collection.Name" class="control-label"></label>
+                <input asp-for="@Model.collection.Name" class="form-control" />
+                <span asp-validation-for="@Model.collection.Name" class="text-danger"></span>
+            </div>
+            @*
+
+            <div class="form-group">
+                <label asp-for="ImagePath" class="control-label"></label>
+                <input asp-for="ImagePath" class="form-control" />
+                <span asp-validation-for="ImagePath" class="text-danger"></span>
+            </div>
+            
+            
+
+          <div class="js-upload uk-placeholder uk-text-center">
+                <span uk-icon="icon: cloud-upload"></span>
+                <span class="uk-text-middle">Attach binaries by dropping them here or</span>
+                <div uk-form-custom>
+                    <input type="file" multiple name="dgDr1" >
+                    <span class="uk-link">selecting one</span>
+                </div>
+            </div>*@
+@*            <progress id="js-progressbar" class="uk-progress" value="0" max="100" hidden></progress>
+    
+            <hr/>
+*@
+
+
+            @*<div class="js-upload dropzone">  </div>*@
+                <input class="js-upload dropzone" id="my-awesome-dropzone" name="imageUri" asp-action="/file-upload" accept="image/png,image/jpeg" type="file" />
+
+               
+
+            
+            
+
+
+            <h3>Properties</h3>
+
+            <div id="dynamic-list"></div>
+            
+            
+
+            <div style="display: inline-list-item; margin: 20px 0">
+                  <input type="text" id="candidate"/>
+                  <button type="button" class="uk-button" onclick="addItem()">add item</button>
+                  <button type="button" class="uk-button" onclick="removeItem()">remove item</button>
+                </div>
+
+                <input type="submit" asp-action="Create" class="btn btn-primary" />
+        </form>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        (function () {
+            var url = $("#foo-view").data("url");
+            $("#foo-view").load(url);
+        })();
+    });
+
+    function addItem() {
+
+        var ul = document.getElementById("dynamic-list");
+        var candidate = document.getElementById("candidate");
+
+        var allInputs = document.getElementsByName("propertyName");
+
+
+        var e = document.getElementById("errorInputProperty");
+
+        for (let str of allInputs) {
+            if (candidate.value == str.value) {
+                candidate.style.borderColor = "red";
+
+                if (e == null) {
+                    var e = document.createElement('div'); e.setAttribute("id", "errorInputProperty"); e.innerHTML = "this property u added"
+                    ul.appendChild(e);
+                }
+
+
+                return;
+            }
+
+        }
+        if (e != null) {
+            ul.removeChild(e)
+            candidate.style.borderColor = "black";
+        }
+
+
+        var div = document.createElement("div"); div.setAttribute("id", candidate.value)
+        div.innerHTML = `<h5>enter name</h5> <input name="propertyName" value=${candidate.value}> <input id=${candidate.value + 1} type="hidden" name="propertyType" value=1>`
+        div.innerHTML += `<select onchange="changeSelect(this)"> <option value=1>целочисленное</option>   <option value=2>точное</option><option value="3">строковое</option> <option value="4">флаг</option> <option value="5">дата</option> </select><hr/>`
+
+        //div.innerHTML = `<h2>Hello</h2>`;
+
+        ul.appendChild(div);
+
+    }
+
+
+    function removeItem() {
+        var ul = document.getElementById("dynamic-list");
+        var candidate = document.getElementById("candidate");
+        var item = document.getElementById(candidate.value);
+        ul.removeChild(item);
+    }
+
+    function changeSelect(param) {
+
+        var hiddenElem = param.previousElementSibling;
+        hiddenElem.value = param.value;
+
+    }
+
+$(document).on("click", "[type='checkbox']", function (e) {
+    if (this.checked) {
+        $('#checkHidden').attr("value", "true");
+    } else {
+        $('#checkHidden').attr("value", "false");}
+});
+
+
+
+    var bar = document.getElementById('js-progressbar');
+
+    UIkit.upload('.js-upload', {
+
+        url: '',
+        multiple: true,
+
+        beforeSend: function () {
+            console.log('beforeSend', arguments);
+        },
+        beforeAll: function () {
+            console.log('beforeAll', arguments);
+        },
+        load: function () {
+            console.log('load', arguments);
+        },
+        error: function () {
+            console.log('error', arguments);
+        },
+        complete: function () {
+            console.log('complete', arguments);
+        },
+
+        loadStart: function (e) {
+            console.log('loadStart', arguments);
+
+            bar.removeAttribute('hidden');
+            bar.max = e.total;
+            bar.value = e.loaded;
+        },
+
+        progress: function (e) {
+            console.log('progress', arguments);
+
+            bar.max = e.total;
+            bar.value = e.loaded;
+        },
+
+        loadEnd: function (e) {
+            console.log('loadEnd', arguments);
+
+            bar.max = e.total;
+            bar.value = e.loaded;
+        },
+
+        completeAll: function () {
+            console.log('completeAll', arguments);
+
+            setTimeout(function () {
+                bar.setAttribute('hidden', 'hidden');
+            }, 1000);
+
+            alert('Upload Completed');
+        }
+
+    });
+
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

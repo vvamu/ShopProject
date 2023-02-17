@@ -1,0 +1,187 @@
+﻿
+@using ShopProject.Data;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> _signInManager
+@inject UserManager<User> _userManager
+
+@model UserManager<User>
+
+@*@using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl }));*@
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Manage</title>
+   
+
+
+
+
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Manage.styles.css" asp-append-version="true" />
+
+
+
+    <meta name="viewport" content="width=device-width" />
+    <title>Manage</title>
+</head>
+<body>
+
+
+      <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand">@*@ViewBag.NameUser*@ HUI </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+
+
+
+    <form action="CheckedUses" , method="post">
+
+<table class="table table-bordered table-striped container" id="tuble">
+    <thead>
+        <tr>
+            <th width="100px" height="50px">
+                
+                <div>
+                    <button  type="button" class="btn btn-default" onclick="checkAll()">Select All</button>
+                    <button type="button" class="btn btn-default" onclick="uncheckAll()">Clear</button>    
+                 </div>
+            </th>
+
+            <th width="10%">
+                @Html.DisplayName("Name")
+            </th>
+            <th width="10%">
+                @Html.DisplayName("Email")
+            </th>
+            <th width="20%">
+                @Html.DisplayName("Date Registered")
+            </th>
+            <th width="10%">
+                @Html.DisplayName("Count Collections")
+            </th>
+            <th width="10%">
+                @Html.DisplayName("Count Items")
+            </th>
+            <th width="10%">
+                @Html.DisplayName("Count Likes")
+            </th>
+            <th width="10%">
+                @Html.DisplayName("Role")
+            </th>
+            <th width="10%">
+                @Html.DisplayName("Is Blocked")
+            </th>
+            
+            <th>
+
+
+
+            <nav>
+                <div class="dropdown text-end" >
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><i class="bi bi-unlock-fill text-danger"><input type="submit" class="dropdown-item" asp-action="Block"  value="Block"></i></input></li>
+                    <li><i class="bi bi-unlock-fill text-primary"></i><input type="submit" class="dropdown-item" asp-action="UnBlock" value="UnBlock"></input></li>
+                    <li><i class="bi bi-trash-fill text-danger"></i><input type="submit" class="dropdown-item" asp-action="Delete" value="Delete"></input></li>
+                    </ul>
+                </div>
+            </nav>
+            </th>
+        </tr>
+    </thead>
+
+        <tbody>
+                @{
+                    
+                        @foreach (var item in _userManager.Users.ToList()) {
+                            <tr>
+                                <td>   
+                                    <input type="checkbox" value="@item.Id" name="brand" asp-action="CheckedUsers" >            
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UserName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DateRegistered)
+                                </td>
+                                <td></td>
+                                 <td></td>
+                                  <td></td>
+                                   <td>
+                                       
+                                @{
+                                    var roles = _userManager.GetClaimsAsync(item).GetAwaiter().GetResult();
+                                    foreach(var role in roles.ToList())
+                                    {
+                                        if(role.Type is System.Security.Claims.ClaimTypes.Role)
+                                        {
+                                            @Html.Display(role.Value)
+                                            ;
+
+                                        }
+
+                                        var res = "";
+                                        var roless = role.Properties.ToList();
+                                        foreach (var r in roles)
+                                            res += r.ToString(); 
+                                        @Html.Display(res)
+                                        @Html.Display("POHUI")
+
+                                    }
+
+                                    @Html.Display("POHUI2")
+
+                                }
+                                          
+                                   </td>
+                                <td>
+                                    @Html.CheckBoxFor(modelItem => item.IsBlocked)
+                                </td>
+                                <td></td>
+                            </tr>
+                 }
+                }
+        </tbody>
+    </form>
+</table>
+      
+
+<script type="text/javascript">
+
+      function checkAll(){
+        var items = document.getElementsByName('brand');
+          for (var i = 0; i < items.length; i++) {
+              if (items[i].type == 'checkbox')
+                  items[i].checked = true;
+          }
+      }
+      function uncheckAll(){
+        var items = document.getElementsByName('brand');
+          for (var i = 0; i < items.length; i++) {
+              if (items[i].type == 'checkbox')
+                  items[i].checked = false;
+          }
+      }
+
+    </script>
+</body>
+</html>

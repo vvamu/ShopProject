@@ -1,0 +1,162 @@
+﻿@model List<Item>
+
+@{
+    ViewData["Title"] = "Items";
+}
+
+<!--await Html.PartialAsync("_ChangeLike.cshtml", Model.Item1, ViewData)
+    -->
+
+<h4>@ViewBag.CollectionName</h4>
+
+<style>
+    .card-buttons-group {
+    text-align: right;
+    padding: 10px;
+    }
+</style>
+
+
+<form>
+
+    <div class="card-buttons-group">
+        @*    <button class="btn btn-danger" id='hideCardsId'>Скрыть</button>
+    <button class='btn btn-success' id='showCardsId'>Показать</button>*@
+        <button asp-action="Create" asp-controller="Item">Create</button>
+    </div>
+    
+
+    <input type="hidden" value="@ViewBag.CollectionId" name="CollectionId" />
+
+    <div style="padding: 10px;"></div>
+
+@if (Model == null)
+{
+    <div class="card col-md-12">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="https://images.wallpaperscraft.ru/image/single/bmw_fary_podsvetka_137326_1280x720.jpg" 
+                     class="img-fluid rounded-start rounded">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Список машин пуст :(</h5>
+                    <p class="card-text">
+                        Список пополниться позже, не расстраивайтесь
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="padding: 10px;"></div>
+    <div class="card text-center">
+        <div class="card-header">
+            <ul class="nav nav-pills card-header-pills">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Active</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Special title treatment</h5>
+            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="row row-cols-1 col-md-4 text-center">
+                <div class="col" style="padding: 10px;">
+                    <div class="card">
+                        @if(item.ImageUri == null)
+                            {
+                            <img src="https://cdn.shopify.com/s/files/1/0053/6880/7458/products/BlueEmperorUlysses_M_2048x.jpg?v=1602113408" class="card-img-top" alt="@item.Name"/>
+                            }
+                        else {
+                            <img src="@Url.Action("GetImage", "Item" , new {itemId = item.Id})" class="card-img-top" alt="@item.Name" />
+                        }
+                            <div class="card-body">
+                            <h5 class="card-title">@item.Name</h5>
+                            <p class="card-text">@item.Description</p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                           @* <li class="list-group-item">Стоимость: @item.Price ₽</li>*@
+                           @* <li class="list-group-item">@item.TypeCar</li>*@
+                        </ul>
+                        <div class="uk-card-footer uk-align-center uk-button-group">
+
+                                <button asp-controller="Item" asp-action="CollectionItems" asp-route-id="@item.Id" class="uk-button uk-button-default">Show More - </button>
+                                <button asp-controller="Item" asp-action="Delete" asp-route-id="@item.Id" class="uk-button uk-button-default">Delete</button>
+                                <button asp-controller="Item" asp-action="Edit" asp-route-id="@item.Id" class="uk-button uk-button-default">Edit</button>
+                                @*<button onclick="LikeItem('ff')">
+                                    Like
+                                   
+                                </button>*@
+                                @await Html.PartialAsync("_ChangeLike.cshtml", @item, ViewData)
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>   
+}
+</form>
+@*@section pageScripts {
+
+}*@
+
+			    <script>
+
+                    function LikeItem(itemId)
+                    {
+                        $.ajax({
+                    url: "/Item/ChangeLike",
+                        method: 'post',
+                        dataType: 'html',
+                        data: { text: itemId },
+                        success: function (data) {
+                            
+                            console.log(data);
+                        },
+                        error : function(data) {
+                console.log(data);
+                        }
+                        })
+                    }
+
+
+
+
+        const hideCardElement = $('#hideCardsId');
+        const showCardElement = $('#showCardsId');
+        const cardElement = $('.card');
+        
+        const interval = 2000;
+        
+        hideCardElement.click(function(){
+            hideCardElement.hide(interval);
+            showCardElement.show(interval);
+            cardElement.hide(interval);
+        });
+        
+        showCardElement.click(function () {
+            hideCardElement.show(interval);
+            showCardElement.hide(interval);
+            cardElement.show(interval);
+        });
+    </script>		
+
+@*@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}*@

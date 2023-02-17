@@ -1,0 +1,66 @@
+﻿@model Item
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create New Item</h1>
+
+<h4>Item</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" method="post">
+            <input type="hidden" value="@ViewBag.CollectionId" name="CollectionId" />
+            <input type="hidden" asp-for="Id"/>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control"/>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImagePath" class="control-label"></label>
+                <input asp-for="ImagePath" class="form-control"/>
+                <span asp-validation-for="ImagePath" class="text-danger"></span>
+            </div>
+
+            @if (@ViewBag.Properties != null)
+            {
+                @foreach (Property property in @ViewBag.Properties)
+                {
+                    <label>@property.Name</label>
+                    @switch (property.PropertyType)
+                    {
+                        case EnumPropertyType.Int:
+                            <input class="form-control m-2" name="propertyValues" type="number" />
+                            break;
+                        case EnumPropertyType.Double:
+                            <input class="form-control m-2" name="propertyValues" type= "number"/>
+                            break;
+                        case EnumPropertyType.Date:
+                            <input class="form-control m-2" name="propertyValues" type="date" />
+                            break;
+                        case EnumPropertyType.Bool:
+                            <input id="checkHidden" hidden name="propertyValues" value="false" />
+                            <input type="checkbox" class="form-check mx-2" id="checkInput" value="false"/>
+                            break;
+                        case EnumPropertyType.String:
+                            <input class="form-control m-2" name="propertyValues" type="text" />
+                            break;
+                    }
+                }
+            }
+
+            <div class="form-group">
+                <input type="submit" asp-action="Create" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

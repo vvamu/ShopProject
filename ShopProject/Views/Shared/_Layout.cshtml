@@ -1,0 +1,249 @@
+﻿
+
+@inject ShopProject.Data.ApplicationDbContext _db;
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ShopProject</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+
+    <link rel="stylesheet" href="~/css/uikit.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/uikit.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/uikit-rtl.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/uikit-rtl.min.css" asp-append-version="true" />
+
+    <style>
+       
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px 10px;
+            border: none;
+            border-bottom: 1px solid #645979;
+            outline: none;
+            border-radius: 5px 5px 0 0;
+            background-color: #ffffff;
+            font-size: 16px;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .list {
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 0 0 5px 5px;
+        }
+
+        .list-items {
+            padding: 10px 5px;
+        }
+
+            .list-items:hover {
+                background-color: #dddddd;
+            }
+    </style>
+</head>
+<
+<body>
+@*    <input type="hidden" value="@_db.Users" id="baseid"/>
+*@            <form id="registerForm" method="post" asp-controller="Account">
+                          
+
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ShopProject</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+               
+                
+
+                
+                            <div class="uk-inline">
+
+                           <div class="uk-margin">
+                                <form class="uk-search uk-search-default">
+                            @*<span uk-search-icon></span>*@
+                                    <input class="uk-search-input" type="search" placeholder="Search" aria-label="Search">
+                                </form>
+                            </div>
+                           
+
+
+
+
+
+
+
+@*
+                            <form autocomplete="off" >
+                                <div>
+                                    
+                                    <input type="text" id="input" placeholder="Type a name here..." />
+                                </div>
+                                <ul class="list"></ul>
+                            </form>*@
+
+
+
+
+
+                               <div uk-dropdown="mode: click">
+                                    <ul>
+@*                                <form asp-action="SearchItem" asp-controller="Home" method="post" >
+                                        @if(_db.Collections != null || _db.Collections.Count() != 0)
+                                        {
+
+                                            var collections = _db.Collections.ToList();
+
+                                            @foreach (var a in _db.Items)
+                                            {
+                                            <input type="hidden" name="collId" value="@a.CollectionId"/>
+                                            
+                                            
+                                            
+                                            
+                                            <input type="hidden" name="itemName" value="@a.CollectionId"/>
+                                            
+                                            
+                                            
+                                            <li><button asp-action="SearchItem"  type="submit"> @collections.Where(x=>x.Id == a.CollectionId).FirstOrDefault().Name -  @a.Name</button></li>
+
+                                            }
+                                        }
+
+
+                                </form>*@
+                                    </ul>
+                                </div>
+                          
+
+                         
+                    </div>
+
+@*                        <div style="display:none">
+                            <div id="search_template" class="search_row">
+                                ... <!-- In here goes the actual content-->
+                                e.g. <input type="text" id="search_template_content"  />
+                            </div>
+                        </div>*@
+
+
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    </form>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+
+    <script src="~/js/uikit.js" asp-append-version="true"></script>
+    <script src="~/js/uikit-icons.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
+
+ <script>
+    let names = [
+        "Ayla",
+        "Jake",
+        "Sean",
+        "Henry",
+        "Brad",
+        "Stephen",
+        "Taylor",
+        "Timmy",
+        "Cathy",
+        "John",
+        "Amanda",
+        "Amara",
+        "Sam",
+        "Sandy",
+        "Danny",
+        "Ellen",
+        "Camille",
+        "Chloe",
+        "Emily",
+        "Nadia",
+        "Mitchell",
+        "Harvey",
+        "Lucy",
+        "Amy",
+        "Glen",
+        "Peter",
+    ];
+    //let items = _db.Items.ToArray();
+    //let itemNames = [];
+    //for(let i = 0 ; i < _db.Items.Count(); i++)
+    //{
+    //    itemNames[i] = items[i].Name; 
+    //}
+
+
+
+
+    //Sort names in ascending order
+    let sortedNames = names.sort();
+    //reference
+    let input = document.getElementById("input");
+    //Execute function on keyup
+    input.addEventListener("keyup", (e) => {
+        //loop through above array
+        //Initially remove all elements ( so if user erases a letter or adds new letter then clean previous outputs)
+        removeElements();
+        for (let i of sortedNames) {
+            //convert input to lowercase and compare with each string
+            if (
+                i.toLowerCase().startsWith(input.value.toLowerCase()) &&
+                input.value != ""
+            ) {
+                //create li element
+                let listItem = document.createElement("li");
+                //One common class name
+                listItem.classList.add("list-items");
+                listItem.style.cursor = "pointer";
+                listItem.setAttribute("onclick", "displayNames('" + i + "')");
+                //Display matched part in bold
+                let word = "<b>" + i.substr(0, input.value.length) + "</b>";
+                word += i.substr(input.value.length);
+                //display the value in array
+                listItem.innerHTML = word;
+                document.querySelector(".list").appendChild(listItem);
+            }
+        }
+    });
+    function displayNames(value) {
+        input.value = value;
+        removeElements();
+    }
+    function removeElements() {
+        //clear all the item
+        let items = document.querySelectorAll(".list-items");
+        items.forEach((item) => {
+            item.remove();
+        });
+    }
+ </script>

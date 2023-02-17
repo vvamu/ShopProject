@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@model Item
+@inject ApplicationDbContext db;
+
+<form >
+    
+        @if(Model.Likes == null)
+        {
+        <div>
+        <a class="uk-icon-button"   uk-icon="heart" asp-action="ChangeLike" asp-controller="Item" method="post" asp-route-itemId="@Model.Id" ></a>
+            0
+        </div>
+
+        }
+        else{
+            @if (db.Likes.Where(x =>x.ItemId == Model.Id).Where(x=>x.UserId == User.Identity.Name).FirstOrDefault() == null)
+            {
+               <div>
+                <a style="color: darkred" class="uk-icon-button" uk-icon="heart" asp-action="ChangeLike" asp-controller="Item" method="post" asp-route-itemId="@Model.Id"></a>
+            
+                </div>
+            }
+            else
+            {
+            <div>
+                <a class="uk-icon-button" uk-icon="heart" asp-action="ChangeLike" asp-controller="Item" method="post" asp-route-itemId="@Model.Id"></a>
+            
+            </div>
+            }
+        }
+    <!--id="btnLike"-->
+    @{
+        var value = @ViewData["IsLiked"];
+    }
+    <input id="IsLiked" value="@value" hidden/>
+</form>
