@@ -161,7 +161,7 @@ public class CollectionController : Controller
         
         
             var properties = _unitOfWork.PropertyRepository.GetByCollectionAsync(collection.Result.Id).Result.ToList();
-        foreach (var i in collectionVm.collection.)
+        //foreach (var i in collectionVm.c)
         {
             //var prop = _unitOfWork.PropertyRepository.GetAsync()
             //if (properties.Contains()
